@@ -1,6 +1,2 @@
-
-import pytest
-
-@pytest.fixture()
-def message():
+def test_0():
     return "This is message"
