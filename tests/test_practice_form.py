@@ -2,17 +2,18 @@ from selene.support.shared import browser
 from selene import have, command
 import os
 
-def arrange_form_opened():
+def arrange_form_opened():# функція в яку додали урл сторінки + видалення реклами(3шт) з очікуванням її завантаження 10 сек
     browser.open('/automation-practice-form')
     browser.all(
         '[id^=google_ads][id$=container__]').with_(timeout=10).should(have.size(3)).perform(command.js.remove)
 
 
 def test_register_form():
-    arrange_form_opened()
+    arrange_form_opened() #викликаемо функцію в котрій прописано урл
 
     # Act
-    browser.element('#firstName').type('Bohdan')
+    browser.element('#firstName').type('Bohdan')#should(be.blank)-перевірка що поле пусте,
+    # .clear().type('Bohdan') це теж саме що .set_value('Bohdan') - очищає поле + прописує дані
 
     browser.element('#lastName').type('Obruch')
 
@@ -42,7 +43,8 @@ def test_register_form():
     browser.element('#state').element('input').type('Haryana').press_tab()
     browser.element('#city').element('input').type('Karnal').press_tab()
 
-    browser.element('#submit').perform(command.js.click)
+    browser.element('#submit').perform(command.js.click)# костиль щоб клікнути на кнопку якої невидно із за футера
+    #або можливо ще так клікнути     .with_(click_by_js=True).click
 
     #Assert
     browser.element('.modal-dialog').element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
