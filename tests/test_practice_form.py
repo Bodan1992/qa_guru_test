@@ -21,9 +21,10 @@ def test_register_form():
     gender_group = browser.element('#genterWrapper')
     gender_group.all('.custom-radio').element_by(have.exact_text("Male")).click()
 
-    browser.element('#userNumber').type('0960263611')
+    mobileNumber = browser.element('#userNumber')
+    mobileNumber.type('0960263611')
 
-    browser.element('#dateOfBirthInput').perform(command.js.scroll_into_view).click()#
+    browser.element('#dateOfBirthInput').perform(command.js.scroll_into_view).click()
     browser.element('.react-datepicker__year-select').element('[value="1992"]').click()
     browser.element('.react-datepicker__month-select').element('[value="0"]').click()
     browser.element('.react-datepicker__day--001').click()
