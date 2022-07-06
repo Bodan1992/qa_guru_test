@@ -1,6 +1,13 @@
 from selene.support.shared import browser
 from selene import have, command
-import os
+
+from demoqa_test.controls import dropdown
+from demoqa_test.controls.table import Table
+from demoqa_test.controls.tags_input import TagsInput
+from demoqa_test.controls.utils import resource
+from demoqa_test.controls.datepicker import DatePicker
+
+
 
 def arrange_form_opened():
     browser.open('/automation-practice-form')
@@ -24,45 +31,44 @@ def test_register_form():
     mobileNumber = browser.element('#userNumber')
     mobileNumber.type('0960263611')
 
-    browser.element('#dateOfBirthInput').perform(command.js.scroll_into_view).click()
-    browser.element('.react-datepicker__year-select').element('[value="1992"]').click()
-    browser.element('.react-datepicker__month-select').element('[value="0"]').click()
-    browser.element('.react-datepicker__day--001').click()
+    date_of_birth = DatePicker(browser.element('#dateOfBirthInput'))
+    date_of_birth.select_year(1992)
+    date_of_birth.select_month(0)
+    date_of_birth.select_day(1)
+    """
+    or
+    date_of_birth.explicit_input('01 Jan 1992') # need help. not working 
+    """
 
-    browser.element('#subjectsInput').type('Maths').press_tab()
-    browser.element('#subjectsInput').type('English').press_tab()
+    subjects = TagsInput(browser.element('#subjectsInput'))
+    subjects.add('Ma', autocomplete='Maths')
+    subjects.add('English')
 
     browser.element('#hobbiesWrapper').all('.custom-checkbox').element_by(have.exact_text('Sports')).click()
     browser.element('#hobbiesWrapper').all('.custom-checkbox').element_by(have.exact_text('Music')).click()
 
-    browser.element('#uploadPicture').send_keys(os.path.abspath('../resources/photo.jpg'))
+    browser.element('#uploadPicture').send_keys(resource('photo.jpg'))
 
-    browser.element('#currentAddress').type('г.Киев, ул.Академика Туполева 20в')
+    browser.element('#currentAddress').type('г.Киев, ул.Академика Туполева 20в').perform(command.js.scroll_into_view)
 
-    browser.element('#state').element('input').type('Haryana').press_tab()
-    browser.element('#city').element('input').type('Karnal').press_tab()
+
+    dropdown.autocomplete(browser.element('#state'), option= 'Ha')
+    dropdown.select(browser.element('#city'), option= 'Karnal')
 
     browser.element('#submit').perform(command.js.click)
 
     #Assert
     browser.element('.modal-dialog').element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
 
-    browser.element('.modal-dialog').all("table tr")[1].all('td').should(have.exact_texts('Student Name','Bohdan Obruch'))
+    results = Table(browser.element('.modal-dialog'))
 
-    browser.element('.modal-dialog').all("table tr")[2].all('td').should(have.exact_texts('Student Email', 'bodan@gmail.com'))
-
-    browser.element('.modal-dialog').all("table tr")[3].all('td').should(have.exact_texts('Gender', 'Male'))
-
-    browser.element('.modal-dialog').all("table tr")[4].all('td').should(have.exact_texts('Mobile', '0960263611'))
-
-    browser.element('.modal-dialog').all("table tr")[5].all('td').should(have.exact_texts('Date of Birth', '01 January,1992'))
-
-    browser.element('.modal-dialog').all("table tr")[6].all('td').should(have.exact_texts('Subjects', 'Maths, English'))
-
-    browser.element('.modal-dialog').all("table tr")[7].all('td').should(have.exact_texts('Hobbies','Sports, Music'))
-
-    browser.element('.modal-dialog').all("table tr")[8].all('td').should(have.exact_texts('Picture', 'photo.jpg'))
-
-    browser.element('.modal-dialog').all("table tr")[9].all('td').should(have.exact_texts('Address', 'г.Киев, ул.Академика Туполева 20в'))
-
-    browser.element('.modal-dialog').all("table tr")[10].all('td').should(have.exact_texts('State and City', 'Haryana Karnal'))
+    results.cells_of_row(0).should(have.exact_texts('Student Name', 'Bohdan Obruch'))
+    results.cells_of_row(1).should(have.exact_texts('Student Email', 'bodan@gmail.com'))
+    results.cells_of_row(2).should(have.exact_texts('Gender', 'Male'))
+    results.cells_of_row(3).should(have.exact_texts('Mobile', '0960263611'))
+    results.cells_of_row(4).should(have.exact_texts('Date of Birth', '01 January,1992'))
+    results.cells_of_row(5).should(have.exact_texts('Subjects', 'Maths, English'))
+    results.cells_of_row(6).should(have.exact_texts('Hobbies','Sports, Music'))
+    results.cells_of_row(7).should(have.exact_texts('Picture', 'photo.jpg'))
+    results.cells_of_row(8).should(have.exact_texts('Address', 'г.Киев, ул.Академика Туполева 20в'))
+    results.cells_of_row(9).should(have.exact_texts('State and City', 'Haryana Karnal'))
