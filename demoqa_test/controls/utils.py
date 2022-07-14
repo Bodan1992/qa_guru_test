@@ -1,5 +1,4 @@
 
-
 def resource(relative_path):
     import demoqa_test
     from pathlib import Path

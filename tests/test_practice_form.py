@@ -1,7 +1,7 @@
 from selene.support.shared import browser
 from selene import have, command
 
-from demoqa_test.controls import dropdown
+from demoqa_test.controls.dropdown import Dropdown
 from demoqa_test.controls.table import Table
 from demoqa_test.controls.tags_input import TagsInput
 from demoqa_test.controls.utils import resource
@@ -35,10 +35,7 @@ def test_register_form():
     date_of_birth.select_year(1992)
     date_of_birth.select_month(0)
     date_of_birth.select_day(1)
-    """
-    or
-    date_of_birth.explicit_input('01 Jan 1992') # need help. not working 
-    """
+    # date_of_birth.explicit_input('01 Jan 1992')
 
     subjects = TagsInput(browser.element('#subjectsInput'))
     subjects.add('Ma', autocomplete='Maths')
@@ -51,9 +48,8 @@ def test_register_form():
 
     browser.element('#currentAddress').type('г.Киев, ул.Академика Туполева 20в').perform(command.js.scroll_into_view)
 
-
-    dropdown.autocomplete(browser.element('#state'), option= 'Ha')
-    dropdown.select(browser.element('#city'), option= 'Karnal')
+    Dropdown(browser.element('#state')).select(option='Haryana')
+    Dropdown(browser.element('#city')).autocomplete(option='Kar')
 
     browser.element('#submit').perform(command.js.click)
 

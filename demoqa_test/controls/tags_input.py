@@ -1,8 +1,7 @@
 from typing import Optional
 from selene import have
-from selene.core.entity import Element, SeleneElement
+from selene.core.entity import Element
 from selene.support.shared import browser
-element: SeleneElement = ...
 
 class TagsInput:
     def __init__(self, element: Element):
