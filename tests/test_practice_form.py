@@ -1,12 +1,11 @@
 from selene.support.shared import browser
 from selene import have, command
 
-from demoqa_test.controls import dropdown
+from demoqa_test.controls.dropdown import Dropdown
 from demoqa_test.controls.table import Table
 from demoqa_test.controls.tags_input import TagsInput
 from demoqa_test.controls.utils import resource
 from demoqa_test.controls.datepicker import DatePicker
-
 
 
 def arrange_form_opened():
@@ -28,17 +27,14 @@ def test_register_form():
     gender_group = browser.element('#genterWrapper')
     gender_group.all('.custom-radio').element_by(have.exact_text("Male")).click()
 
-    mobileNumber = browser.element('#userNumber')
-    mobileNumber.type('0960263611')
+    mobile_number = browser.element('#userNumber')
+    mobile_number.type('0960263611')
 
     date_of_birth = DatePicker(browser.element('#dateOfBirthInput'))
     date_of_birth.select_year(1992)
     date_of_birth.select_month(0)
     date_of_birth.select_day(1)
-    """
-    or
-    date_of_birth.explicit_input('01 Jan 1992') # need help. not working 
-    """
+    # date_of_birth.explicit_input('01 Jan 1992')
 
     subjects = TagsInput(browser.element('#subjectsInput'))
     subjects.add('Ma', autocomplete='Maths')
@@ -51,14 +47,14 @@ def test_register_form():
 
     browser.element('#currentAddress').type('г.Киев, ул.Академика Туполева 20в').perform(command.js.scroll_into_view)
 
-
-    dropdown.autocomplete(browser.element('#state'), option= 'Ha')
-    dropdown.select(browser.element('#city'), option= 'Karnal')
+    Dropdown(browser.element('#state')).select(option='Haryana')
+    Dropdown(browser.element('#city')).autocomplete(option='Kar')
 
     browser.element('#submit').perform(command.js.click)
 
-    #Assert
-    browser.element('.modal-dialog').element('#example-modal-sizes-title-lg').should(have.text('Thanks for submitting the form'))
+    # Assert
+    browser.element('.modal-dialog').element('#example-modal-sizes-title-lg').should(
+        have.text('Thanks for submitting the form'))
 
     results = Table(browser.element('.modal-dialog'))
 
@@ -68,7 +64,7 @@ def test_register_form():
     results.cells_of_row(3).should(have.exact_texts('Mobile', '0960263611'))
     results.cells_of_row(4).should(have.exact_texts('Date of Birth', '01 January,1992'))
     results.cells_of_row(5).should(have.exact_texts('Subjects', 'Maths, English'))
-    results.cells_of_row(6).should(have.exact_texts('Hobbies','Sports, Music'))
+    results.cells_of_row(6).should(have.exact_texts('Hobbies', 'Sports, Music'))
     results.cells_of_row(7).should(have.exact_texts('Picture', 'photo.jpg'))
     results.cells_of_row(8).should(have.exact_texts('Address', 'г.Киев, ул.Академика Туполева 20в'))
     results.cells_of_row(9).should(have.exact_texts('State and City', 'Haryana Karnal'))
