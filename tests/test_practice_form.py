@@ -18,7 +18,7 @@ def test_submit_automation_practice_form():
         .set_first_name(Student.name)
         .set_last_name(Student.surname)
         .set_email(Student.email)
-        .set_mobile(Student.mobile_number)
+        .set_mobile_number(Student.mobile_number)
         .set_gender(Gender.male)
         .set_birth_date(Student.year,
                         Student.month,
@@ -27,7 +27,7 @@ def test_submit_automation_practice_form():
                          Subjects.english)
         .select_hobbies(Hobbies.music,
                         Hobbies.sports)
-        .upload(Student.avatar)
+        .upload_picture(Student.avatar)
         .set_address(Student.address)
         .set_state_and_city(Student.state, Student.city)
     )

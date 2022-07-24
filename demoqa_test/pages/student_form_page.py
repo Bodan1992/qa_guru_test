@@ -20,7 +20,7 @@ class StudentRegistrationForm:
         s('#userEmail').type(value)
         return self
 
-    def set_mobile(self, value):
+    def set_mobile_number(self, value):
         s('#userNumber').type(value)
         return self
 
@@ -45,7 +45,7 @@ class StudentRegistrationForm:
             s('#hobbiesWrapper').all('.custom-checkbox').element_by(have.exact_text(value)).click()
         return self
 
-    def upload(self, file: str):
+    def upload_picture(self, file: str):
         s('#uploadPicture').send_keys(resource(file))
         return self
 
