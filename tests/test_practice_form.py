@@ -1,5 +1,3 @@
-from selene import have
-from selene.support.shared import browser
 from selene.support.shared.jquery_style import s
 
 from demoqa_test.data.data import *
