@@ -9,12 +9,10 @@ from demoqa_test.controls.utils import arrange_form_opened
 
 
 def test_submit_automation_practice_form():
+    #Given
     arrange_form_opened()
 
-    browser.should(have.title('ToolsQA'))
-    s('.main-header').should(have.exact_text('Practice Form'))
-
-    # Filling the form
+    # When
     (
         StudentRegistrationForm()
         .set_first_name(Student.name)
@@ -36,7 +34,7 @@ def test_submit_automation_practice_form():
 
     StudentRegistrationForm().submit_form()
 
-    # Assert data
+    # Then
     results = Table(s('.table'))
     (
         results
